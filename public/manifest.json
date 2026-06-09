@@ -1,0 +1,39 @@
+{
+  "name": "Next Chapter ARC Tracker",
+  "short_name": "Next Chapter",
+  "description": "Track Advance Reader Copies (ARCs) and review deadlines.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f121d",
+  "theme_color": "#0a84ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add ARC",
+      "url": "/add",
+      "description": "Add a new Advance Reader Copy"
+    },
+    {
+      "name": "Library",
+      "url": "/library",
+      "description": "View your ARC library"
+    },
+    {
+      "name": "Kanban Board",
+      "url": "/kanban",
+      "description": "View reading progress board"
+    }
+  ]
+}
