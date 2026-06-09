@@ -116,7 +116,7 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
     
     // Clean any undefined values to prevent Firestore serialization errors
     const cleanedData = Object.fromEntries(
-      Object.entries(arcData).filter(([_, v]) => v !== undefined)
+      Object.entries(arcData).filter(([, v]) => v !== undefined)
     );
     
     try {
@@ -139,7 +139,7 @@ export const DatabaseProvider = ({ children }: { children: React.ReactNode }) =>
 
     // Clean any undefined values to prevent Firestore serialization errors
     const cleanedData = Object.fromEntries(
-      Object.entries(arcData).filter(([_, v]) => v !== undefined)
+      Object.entries(arcData).filter(([, v]) => v !== undefined)
     );
 
     try {

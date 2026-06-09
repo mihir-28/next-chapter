@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
-  Kanban, 
   HelpCircle
 } from "lucide-react";
 import { useDatabase, ARC } from "@/context/DatabaseContext";
