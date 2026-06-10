@@ -236,7 +236,7 @@ export default function KanbanPage() {
                       >
                         {/* Mini book cover */}
                         <div className="w-9 h-12 rounded overflow-hidden shrink-0 border border-slate-850/50">
-                          <BookCover title={arc.title} author={arc.author} coverUrl={arc.coverUrl} />
+                          <BookCover title={arc.title} author={arc.author} coverUrl={arc.coverUrl} size="xs" />
                         </div>
                         
                         {/* Summary details */}

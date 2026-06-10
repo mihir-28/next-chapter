@@ -13,7 +13,7 @@ export default function AddARCPage() {
       <meta name="description" content="Add a new Advance Reader Copy (ARC) to your tracker pipeline." />
       <ARCForm
         onSubmit={addARC}
-        submitLabel="Add Book to Pipeline"
+        submitLabel="Add Book"
         title="Track New ARC"
       />
     </>

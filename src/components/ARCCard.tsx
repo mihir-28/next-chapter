@@ -64,7 +64,7 @@ export default function ARCCard({ arc }: ARCCardProps) {
       <div className="flex h-36">
         {/* Left Side: Book Cover */}
         <div className="w-24 h-full shrink-0 border-r border-slate-850/60 overflow-hidden">
-          <BookCover title={arc.title} author={arc.author} coverUrl={arc.coverUrl} />
+          <BookCover title={arc.title} author={arc.author} coverUrl={arc.coverUrl} size="md" />
         </div>
 
         {/* Right Side: Details */}
@@ -110,7 +110,7 @@ export default function ARCCard({ arc }: ARCCardProps) {
                 </div>
                 <div className="h-1 w-full bg-slate-850/50 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#0a84ff] to-[#64d2ff] rounded-full"
+                    className="h-full bg-linear-to-r from-[#0a84ff] to-[#64d2ff] rounded-full"
                     style={{ width: `${arc.progress || 0}%` }}
                   ></div>
                 </div>

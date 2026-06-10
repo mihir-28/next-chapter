@@ -10,7 +10,6 @@ import {
   PlusCircle, 
   LogOut, 
   Sparkles,
-  Plus
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import Logo from "@/components/Logo";
@@ -196,20 +195,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen md:pl-76">
         {/* Header for Mobile only (hidden on Desktop) */}
-        <header className="md:hidden flex items-center justify-between px-6 py-4 border-b border-white/5 glass-nav sticky top-0 z-40">
+        <header className="md:hidden flex items-center justify-between px-6 py-4 sticky top-0 z-40">
           <div className="flex items-center space-x-2.5">
             <Logo size={28} showBackground={true} className="rounded-lg border border-white/5 shadow-sm shrink-0" />
             <span className="text-lg font-bold tracking-tight text-white font-sans bg-clip-text bg-linear-to-r from-white via-slate-100 to-sky-200">Next Chapter</span>
           </div>
-          <div className="flex items-center bg-slate-900/60 border border-white/5 rounded-full px-2.5 py-1.5 gap-2 shadow-sm">
-            <Link 
-              href="/add" 
-              title="Track New ARC" 
-              className="p-1 text-slate-400 hover:text-white transition-colors cursor-pointer"
-            >
-              <Plus className="w-4.5 h-4.5" />
-            </Link>
-            <div className="w-px h-3.5 bg-white/10"></div>
+          <div className="flex items-center bg-slate-900/60 border border-white/5 rounded-full px-1.5 py-1.5 gap-2 shadow-sm">
             <button 
               onClick={logOut} 
               title="Sign Out" 

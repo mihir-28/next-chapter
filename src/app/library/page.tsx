@@ -118,10 +118,10 @@ export default function LibraryPage() {
         </div>
         <Link
           href="/add"
-          className="p-3 rounded-2xl bg-[#0a84ff] hover:bg-[#0071e3] active:scale-[0.98] transition-all text-white font-semibold text-sm shadow-md flex items-center justify-center cursor-pointer"
+          className="p-3 rounded-full bg-linear-to-r from-[#2e0854] via-[#5b1b9e] to-[#7c3aed] bg-clip-padding border border-[#e5b842]/30 hover:border-[#fbdf93]/80 text-[#fbdf93] font-semibold text-sm shadow-md flex items-center justify-center hover:shadow-[0_0_22px_rgba(124,58,237,0.3)] hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 cursor-pointer"
           title="Add ARC"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-5 h-5 text-[#fbdf93] stroke-[2.5]" />
         </Link>
       </div>
 
@@ -277,8 +277,8 @@ export default function LibraryPage() {
       {filteredAndSortedARCs.length === 0 ? (
         /* Empty results container */
         <div className="p-8 rounded-2xl glass-panel border border-white/5 text-center py-16 flex flex-col items-center relative overflow-hidden">
-          <div className="absolute -top-12 -left-12 w-32 h-32 bg-[#0a84ff]/5 rounded-full blur-2xl"></div>
-          <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-[#64d2ff]/5 rounded-full blur-2xl"></div>
+          <div className="absolute -top-12 -left-12 w-32 h-32 bg-[#e5b842]/5 rounded-full blur-2xl"></div>
+          <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-[#7c3aed]/5 rounded-full blur-2xl"></div>
           <Logo size={64} className="mb-4 rounded-2xl shadow-lg border border-white/5" />
           <h3 className="text-lg font-bold text-white font-sans">No ARCs Found</h3>
           <p className="text-slate-400 text-sm max-w-xs mt-1 mb-6 font-body">
@@ -289,7 +289,7 @@ export default function LibraryPage() {
           {arcs.length === 0 ? (
             <Link
               href="/add"
-              className="py-3 px-6 rounded-xl bg-[#0a84ff] hover:bg-[#0071e3] active:scale-[0.98] transition-all text-white font-semibold text-sm shadow-md cursor-pointer"
+              className="py-3 px-6 rounded-full bg-linear-to-r from-[#2e0854] via-[#5b1b9e] to-[#7c3aed] bg-clip-padding border border-[#e5b842]/30 hover:border-[#fbdf93]/80 text-[#fbdf93] font-semibold text-sm tracking-wide shadow-md hover:shadow-[0_0_22px_rgba(124,58,237,0.3)] hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 cursor-pointer"
             >
               Add ARC Book
             </Link>

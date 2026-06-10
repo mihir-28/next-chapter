@@ -102,13 +102,13 @@ export default function ARCForm({
       deadline,
       readingStatus,
       reviewStatus,
-      coverUrl: coverUrl.trim() || undefined,
-      releaseDate: releaseDate || undefined,
-      dateReceived: dateReceived || undefined,
-      progress: readingStatus === "Currently Reading" || readingStatus === "Finished" ? progress : undefined,
-      notes: notes.trim() || undefined,
-      rating: readingStatus === "Finished" && rating > 0 ? rating : undefined,
-      reviewLink: reviewStatus === "Published" || reviewStatus === "Submitted" ? reviewLink.trim() : undefined,
+      coverUrl: coverUrl.trim() || "",
+      releaseDate: releaseDate || "",
+      dateReceived: dateReceived || "",
+      progress: readingStatus === "Currently Reading" || readingStatus === "Finished" ? progress : 0,
+      notes: notes.trim() || "",
+      rating: readingStatus === "Finished" && rating > 0 ? rating : 0,
+      reviewLink: reviewStatus === "Published" || reviewStatus === "Submitted" ? reviewLink.trim() : "",
     };
 
     try {
@@ -150,18 +150,28 @@ export default function ARCForm({
           <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider font-sans">Cover Artwork</h2>
           
           {/* Card preview layout */}
-          <div className="aspect-3/4 w-48 mx-auto lg:w-full rounded-3xl overflow-hidden border border-white/5 shadow-xl relative bg-slate-900">
-            <BookCover title={bookTitle || "Title Placeholder"} author={author || "Author"} coverUrl={coverUrl} />
+          <div className="aspect-5/8 w-48 mx-auto lg:w-full rounded-3xl overflow-hidden border border-white/5 shadow-xl relative bg-slate-900 group">
+            <BookCover title={bookTitle || "Title Placeholder"} author={author || "Author"} coverUrl={coverUrl} size="lg" />
+            {coverUrl && (
+              <button
+                type="button"
+                onClick={() => setCoverUrl("")}
+                className="absolute top-3 right-3 p-2.5 rounded-xl bg-slate-950/80 hover:bg-rose-950/90 border border-white/10 hover:border-rose-900/40 text-slate-400 hover:text-rose-400 transition-all cursor-pointer shadow-lg active:scale-90 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 z-20"
+                title="Remove cover image"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           {/* Upload and URL Inputs */}
-          <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-850/50 space-y-4">
+          <div className="p-6 glass-panel border border-slate-800/40 space-y-4">
             {/* File Upload */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 font-sans cursor-pointer">
                 Upload Cover File
               </label>
-              <label className="flex items-center justify-center space-x-2 py-2.5 px-4 rounded-xl bg-slate-900 border border-slate-850 hover:border-slate-700 text-slate-300 hover:text-slate-100 text-xs font-medium cursor-pointer transition-all">
+              <label className="flex items-center justify-center space-x-2 py-2.5 px-4 rounded-2xl bg-slate-900 border border-slate-850 hover:border-slate-700 text-slate-300 hover:text-slate-100 text-xs font-medium cursor-pointer transition-all">
                 <Upload className="w-4 h-4 text-blue-400" />
                 <span>Select cover image</span>
                 <input
@@ -193,7 +203,7 @@ export default function ARCForm({
                   placeholder="https://..."
                   value={coverUrl.startsWith("data:") ? "" : coverUrl} // Clear if base64 to allow URL typing
                   onChange={(e) => setCoverUrl(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 rounded-xl bg-slate-900 border border-slate-850 focus:border-blue-500/30 outline-none text-slate-200 text-xs font-body"
+                  className="w-full pl-10 pr-3 py-2 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/30 outline-none text-slate-200 text-xs font-body"
                 />
               </div>
             </div>
@@ -254,7 +264,7 @@ export default function ARCForm({
                     <button
                       type="button"
                       className={cn(
-                        "w-full text-left font-normal pl-11 pr-4 py-3 h-12 text-sm bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-100 rounded-xl transition-all flex items-center cursor-pointer select-none relative",
+                        "w-full text-left font-normal pl-11 pr-4 py-3 h-12 text-sm bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-100 rounded-2xl transition-all flex items-center cursor-pointer select-none relative",
                         !deadline && "text-slate-500"
                       )}
                     >
@@ -304,7 +314,7 @@ export default function ARCForm({
                         setProgress(10);
                       }
                     }}
-                    className={`flex items-center justify-center text-center px-2 py-1.5 min-h-[44px] h-auto rounded-2xl text-[10px] sm:text-xs font-bold border cursor-pointer transition-all duration-300 leading-tight ${
+                    className={`flex items-center justify-center text-center px-2 py-1.5 min-h-11 h-auto rounded-2xl text-[10px] sm:text-xs font-bold border cursor-pointer transition-all duration-300 leading-tight ${
                       readingStatus === status
                         ? status === "To Read" ? "bg-sky-500/10 text-sky-400 border-sky-500/30 shadow-md shadow-sky-500/5 scale-[1.01]" :
                           status === "Currently Reading" ? "bg-blue-500/10 text-blue-400 border-blue-500/30 shadow-md shadow-blue-500/5 scale-[1.01]" :
@@ -328,7 +338,7 @@ export default function ARCForm({
                     key={status}
                     type="button"
                     onClick={() => setReviewStatus(status)}
-                    className={`flex items-center justify-center text-center px-2 py-1.5 min-h-[44px] h-auto rounded-2xl text-[10px] sm:text-xs font-bold border cursor-pointer transition-all duration-300 leading-tight ${
+                    className={`flex items-center justify-center text-center px-2 py-1.5 min-h-11 h-auto rounded-2xl text-[10px] sm:text-xs font-bold border cursor-pointer transition-all duration-300 leading-tight ${
                       reviewStatus === status
                         ? status === "Not Started" ? "bg-slate-700/20 text-slate-450 border-slate-700/30 shadow-md scale-[1.01]" :
                           status === "Drafted" ? "bg-amber-500/10 text-amber-400 border-amber-500/30 shadow-md shadow-amber-500/5 scale-[1.01]" :
@@ -385,7 +395,7 @@ export default function ARCForm({
                         }
                       }
                     }}
-                    className="w-16 bg-slate-900 border border-slate-850 rounded-xl px-2 py-1 text-center text-xs font-bold text-slate-200"
+                    className="w-16 bg-slate-900 border border-slate-850 rounded-2xl px-2 py-1 text-center text-xs font-bold text-slate-200"
                   />
                 </div>
               </div>
@@ -406,7 +416,7 @@ export default function ARCForm({
                       <button
                         type="button"
                         className={cn(
-                          "w-full text-left font-normal pl-9 pr-3 py-2.5 h-10 text-xs bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-200 rounded-xl transition-all flex items-center cursor-pointer select-none relative",
+                          "w-full text-left font-normal pl-9 pr-3 py-2.5 h-10 text-xs bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-200 rounded-2xl transition-all flex items-center cursor-pointer select-none relative",
                           !releaseDate && "text-slate-500"
                         )}
                       >
@@ -439,7 +449,7 @@ export default function ARCForm({
                       <button
                         type="button"
                         className={cn(
-                          "w-full text-left font-normal pl-9 pr-3 py-2.5 h-10 text-xs bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-205 rounded-xl transition-all flex items-center cursor-pointer select-none relative",
+                          "w-full text-left font-normal pl-9 pr-3 py-2.5 h-10 text-xs bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-205 rounded-2xl transition-all flex items-center cursor-pointer select-none relative",
                           !dateReceived && "text-slate-500"
                         )}
                       >
@@ -505,7 +515,7 @@ export default function ARCForm({
                     placeholder="https://myblog.com/review"
                     value={reviewLink}
                     onChange={(e) => setReviewLink(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-850 focus:border-blue-500/35 outline-none text-slate-200 text-xs font-body"
+                    className="w-full pl-10 pr-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/35 outline-none text-slate-200 text-xs font-body"
                   />
                 </div>
               </div>
@@ -521,7 +531,7 @@ export default function ARCForm({
                   rows={4}
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-slate-900 border border-slate-850 focus:border-blue-500/30 outline-none text-slate-205 text-xs font-body resize-y"
+                  className="w-full pl-10 pr-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/30 outline-none text-slate-205 text-xs font-body resize-y"
                 />
               </div>
             </div>
@@ -535,7 +545,7 @@ export default function ARCForm({
               <button
                 type="button"
                 onClick={onDelete}
-                className="w-full sm:w-auto py-3 px-6 rounded-xl border border-rose-900/40 hover:bg-rose-950/10 text-rose-400 font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
+                className="w-full sm:w-auto py-3 px-6 rounded-full border border-rose-900/40 hover:bg-rose-950/10 text-rose-400 font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
                 <span>Delete ARC</span>
@@ -548,14 +558,14 @@ export default function ARCForm({
               <button
                 type="button"
                 onClick={() => router.push("/")}
-                className="py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 font-semibold text-xs cursor-pointer flex-1 sm:flex-none"
+                className="py-3 px-6 rounded-full bg-slate-900 hover:bg-slate-850 border border-slate-800 text-slate-300 font-semibold text-xs cursor-pointer flex-1 sm:flex-none h-12 flex items-center justify-center transition-all duration-300"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="py-3.5 px-8 rounded-2xl bg-[#0a84ff] hover:bg-[#0071e3] active:scale-[0.98] disabled:opacity-50 disabled:scale-100 transition-all text-white font-bold text-xs shadow-lg shadow-blue-500/10 cursor-pointer flex-1 sm:flex-none h-12 flex items-center justify-center"
+                className="py-3 px-8 rounded-full bg-linear-to-r from-[#2e0854] via-[#5b1b9e] to-[#7c3aed] bg-clip-padding border border-[#e5b842]/30 hover:border-[#fbdf93]/80 text-[#fbdf93] font-semibold text-xs tracking-wide shadow-lg shadow-purple-950/50 hover:shadow-[0_0_22px_rgba(124,58,237,0.3)] hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 cursor-pointer flex-1 sm:flex-none h-12 flex items-center justify-center disabled:opacity-50 disabled:scale-100"
               >
                 {loading ? "Saving..." : submitLabel}
               </button>
