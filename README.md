@@ -88,10 +88,11 @@ Every book displays:
 
 Urgency indicators help you focus on what needs attention first.
 
-Status| Indicator
-Overdue| 🔴 Red
-Due Soon| 🟠 Orange
-On Track| 🟢 Green
+| Status   | Indicator |
+|----------|-----------|
+| Overdue  | 🔴 Red     |
+| Due Soon | 🟠 Orange  |
+| On Track | 🟢 Green   |
 
 ---
 
