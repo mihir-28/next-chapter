@@ -4,7 +4,7 @@
   "description": "Track Advance Reader Copies (ARCs) and review deadlines.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f121d",
+  "background_color": "#070710",
   "theme_color": "#0a84ff",
   "orientation": "portrait-primary",
   "icons": [
