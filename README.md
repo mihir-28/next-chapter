@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/60441c4e-05ec-432d-92d2-53c2ee59d513/deploy-status)](https://app.netlify.com/projects/nextchapter-app/deploys)
+
 # Next Chapter 📚✨
 
 <p align="center">

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { 
   HelpCircle
 } from "lucide-react";
@@ -164,12 +163,7 @@ export default function KanbanPage() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-      className="space-y-6 flex flex-col h-full"
-    >
+    <div className="space-y-6 flex flex-col h-full">
       <title>Review Board | Next Chapter ARC Tracker</title>
       <meta name="description" content="Track your reading progress and review status on our interactive drag-and-drop Kanban review board." />
       {/* Header Info */}
@@ -283,6 +277,6 @@ export default function KanbanPage() {
 
       </div>
 
-    </motion.div>
+    </div>
   );
 }

@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import { 
   BookOpen, 
   Clock, 
@@ -101,12 +100,7 @@ export default function DashboardPage() {
   });
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="space-y-8"
-    >
+    <div className="space-y-8">
       <title>Dashboard | Next Chapter ARC Tracker</title>
       <meta name="description" content="Manage your Advance Reader Copies, track review deadlines, and monitor your reading progress." />
       {/* Top Welcome Header */}
@@ -174,17 +168,17 @@ export default function DashboardPage() {
           <span className="uppercase tracking-wider">Deadline Status Matrix</span>
         </h2>
         <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group">
+          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group flex flex-col justify-between h-28">
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-1">Overdue</p>
-            <p className="text-2xl font-extrabold text-rose-400 mt-1.5">{overdueCount}</p>
+            <p className="text-2xl font-extrabold text-rose-400">{overdueCount}</p>
           </div>
-          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group">
+          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group flex flex-col justify-between h-28">
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-1">Due This Week</p>
-            <p className="text-2xl font-extrabold text-amber-400 mt-1.5">{dueThisWeek}</p>
+            <p className="text-2xl font-extrabold text-amber-400">{dueThisWeek}</p>
           </div>
-          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group">
+          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group flex flex-col justify-between h-28">
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-1">Due This Month</p>
-            <p className="text-2xl font-extrabold text-blue-400 mt-1.5">{dueThisMonth}</p>
+            <p className="text-2xl font-extrabold text-blue-400">{dueThisMonth}</p>
           </div>
         </div>
       </div>
@@ -331,6 +325,6 @@ export default function DashboardPage() {
         </div>
         
       </div>
-    </motion.div>
+    </div>
   );
 }

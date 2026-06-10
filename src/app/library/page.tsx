@@ -103,12 +103,7 @@ export default function LibraryPage() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-      className="space-y-6"
-    >
+    <div className="space-y-6">
       <title>Library | Next Chapter ARC Tracker</title>
       <meta name="description" content="Browse, search, filter, and sort your entire Advance Reader Copy (ARC) collection." />
       {/* Header section */}
@@ -327,6 +322,6 @@ export default function LibraryPage() {
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
