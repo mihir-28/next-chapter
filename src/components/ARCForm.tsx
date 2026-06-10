@@ -135,7 +135,7 @@ export default function ARCForm({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6 pb-24">
+    <div className="w-full max-w-4xl mx-auto space-y-6 pb-12">
       
       {/* Header back navigation */}
       <div className="flex items-center space-x-3">

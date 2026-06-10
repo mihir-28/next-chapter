@@ -247,7 +247,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
             {/* Floating Navigation Dock for Mobile Devices (visionOS style) */}
             <div className="md:hidden fixed bottom-6 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-full glass-nav shadow-2xl border border-white/10 max-w-sm w-full justify-between pointer-events-auto">
+                <div className="flex items-center gap-1.5 px-3 py-2 rounded-full! glass-panel backdrop-blur-sm shadow-2xl border border-white/10 max-w-sm w-full justify-between pointer-events-auto">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href;
