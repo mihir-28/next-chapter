@@ -15,6 +15,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import Logo from "@/components/Logo";
 import { motion } from "framer-motion";
+import InstallToast from "@/components/InstallToast";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const { user, loading, signInWithGoogle, logOut } = useAuth();
@@ -53,8 +54,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="w-full max-w-md p-8 rounded-3xl glass-panel relative z-10 border border-slate-800/60 shadow-2xl flex flex-col items-center">
           {/* Logo */}
           <div className="mb-6 relative group transition-transform duration-500 hover:scale-105 active:scale-95 cursor-pointer">
-            <div className="absolute inset-0 bg-linear-to-tr from-[#0a84ff] to-[#64d2ff] rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <Logo size={72} showBackground={true} className="rounded-3xl border border-white/10 shadow-2xl" />
+            <div className="absolute inset-0 bg-linear-to-tr from-[#0a84ff] to-[#64d2ff] rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity z-0"></div>
+            <Logo size={72} showBackground={true} className="relative z-10 rounded-3xl border border-white/10 shadow-2xl" />
           </div>
           
           <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2 text-center font-sans">
@@ -110,6 +111,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             PWA enabled. Installable directly on mobile and desktop.
           </p>
         </div>
+        <InstallToast />
       </div>
     );
   }
@@ -150,7 +152,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 {isActive && (
                   <motion.div
                     layoutId="activeDesktopTab"
-                    className="absolute inset-0 bg-white/5 border border-white/5 rounded-xl -z-10"
+                    className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-xl -z-10 backdrop-blur-sm"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -244,7 +246,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 {isActive && (
                   <motion.div
                     layoutId="activeMobileTab"
-                    className="absolute inset-0 bg-white/10 border border-white/5 rounded-full"
+                    className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full backdrop-blur-sm"
                     style={{ zIndex: -1 }}
                     transition={{ type: "spring", stiffness: 350, damping: 26 }}
                   />
@@ -256,6 +258,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </div>
       </div>
+      <InstallToast />
     </div>
   );
 }

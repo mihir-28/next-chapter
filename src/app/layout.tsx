@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { DatabaseProvider } from "@/context/DatabaseContext";
 import AppShell from "@/components/AppShell";
 import PWARegistration from "@/components/PWARegistration";
+import { Toaster } from "sonner";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -21,7 +22,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Next Chapter | ARC Tracker",
   description: "Advance Reader Copy (ARC) tracker for book reviewers to manage reading progress and review deadlines.",
-  manifest: "/site.webmanifest",
+  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -64,6 +65,7 @@ export default function RootLayout({
           </DatabaseProvider>
         </AuthProvider>
         <PWARegistration />
+        <Toaster theme="dark" position="top-right" closeButton />
       </body>
     </html>
   );

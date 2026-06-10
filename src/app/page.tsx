@@ -133,7 +133,7 @@ export default function DashboardPage() {
         {/* Total Active */}
         <div className="p-5 rounded-3xl glass-card border border-slate-800/30 hover:border-blue-500/20 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-[0_0_25px_0_rgba(10,132,255,0.06)]">
           <div className="absolute top-0 right-0 p-3 text-slate-655 group-hover:text-blue-500/35 transition-colors">
-            <BookOpen className="w-12 h-12" />
+            <BookOpen className="w-7 h-7" />
           </div>
           <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Active ARCs</span>
           <span className="text-3xl font-extrabold text-white font-sans mt-2">{totalActive}</span>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
         {/* Currently Reading */}
         <div className="p-5 rounded-3xl glass-card border border-slate-800/30 hover:border-sky-500/20 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-[0_0_25px_0_rgba(100,210,255,0.06)]">
           <div className="absolute top-0 right-0 p-3 text-slate-655 group-hover:text-sky-500/35 transition-colors">
-            <Clock className="w-12 h-12" />
+            <Clock className="w-7 h-7" />
           </div>
           <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Reading Now</span>
           <span className="text-3xl font-extrabold text-white font-sans mt-2">{readingCount}</span>
@@ -151,7 +151,7 @@ export default function DashboardPage() {
         {/* Reviews Pending */}
         <div className="p-5 rounded-3xl glass-card border border-slate-800/30 hover:border-emerald-500/20 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-[0_0_25px_0_rgba(16,185,129,0.06)]">
           <div className="absolute top-0 right-0 p-3 text-slate-655 group-hover:text-emerald-500/35 transition-colors">
-            <CheckCircle2 className="w-12 h-12" />
+            <CheckCircle2 className="w-7 h-7" />
           </div>
           <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Reviews Pending</span>
           <span className="text-3xl font-extrabold text-white font-sans mt-2">{reviewsPendingCount}</span>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
         {/* Overdue Books */}
         <div className="p-5 rounded-3xl glass-card border border-rose-900/15 bg-rose-950/5 flex flex-col justify-between h-32 relative overflow-hidden group hover:border-rose-500/30 hover:shadow-[0_0_25px_0_rgba(244,63,94,0.08)]">
           <div className="absolute top-0 right-0 p-3 text-rose-500/25 group-hover:text-rose-500/40 transition-colors">
-            <AlertCircle className="w-12 h-12" />
+            <AlertCircle className="w-7 h-7" />
           </div>
           <span className="text-rose-400/80 text-[10px] font-bold uppercase tracking-wider">Overdue</span>
           <span className="text-3xl font-extrabold text-rose-400 font-sans mt-2">{overdueCount}</span>
@@ -174,15 +174,15 @@ export default function DashboardPage() {
           <span className="uppercase tracking-wider">Deadline Status Matrix</span>
         </h2>
         <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="p-3.5 rounded-2xl bg-slate-950/30 border border-white/5 border-l-4 border-l-rose-500 text-left pl-4.5 relative overflow-hidden group">
+          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group">
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-1">Overdue</p>
             <p className="text-2xl font-extrabold text-rose-400 mt-1.5">{overdueCount}</p>
           </div>
-          <div className="p-3.5 rounded-2xl bg-slate-950/30 border border-white/5 border-l-4 border-l-amber-500 text-left pl-4.5 relative overflow-hidden group">
+          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group">
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-1">Due This Week</p>
             <p className="text-2xl font-extrabold text-amber-400 mt-1.5">{dueThisWeek}</p>
           </div>
-          <div className="p-3.5 rounded-2xl bg-slate-950/30 border border-white/5 border-l-4 border-l-blue-500 text-left pl-4.5 relative overflow-hidden group">
+          <div className="p-4 rounded-2xl bg-slate-950/30 border border-white/5 text-left relative overflow-hidden group">
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-1">Due This Month</p>
             <p className="text-2xl font-extrabold text-blue-400 mt-1.5">{dueThisMonth}</p>
           </div>
@@ -255,7 +255,7 @@ export default function DashboardPage() {
                           </div>
                           <div className="h-0.5 w-full bg-slate-850/60 rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-gradient-to-r from-[#0a84ff] to-[#64d2ff]" 
+                              className="h-full bg-linear-to-r from-[#0a84ff] to-[#64d2ff]" 
                               style={{ width: `${arc.progress || 0}%` }}
                             ></div>
                           </div>

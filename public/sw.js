@@ -2,7 +2,7 @@ const CACHE_NAME = 'next-chapter-cache-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
-  '/icon.svg',
+  '/android-chrome-192x192.png',
   '/favicon.ico',
 ];
 
