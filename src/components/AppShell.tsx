@@ -56,8 +56,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen bg-[#070b13] text-slate-100">
                 <div className="relative w-20 h-20 mb-4">
-                    <div className="absolute inset-0 rounded-full border-4 border-blue-500/20 border-t-[#0a84ff] animate-spin"></div>
-                    <div className="absolute inset-2 rounded-full border-4 border-sky-500/10 border-b-[#64d2ff] animate-spin duration-1000"></div>
+                    <div className="absolute inset-0 rounded-full border-4 border-[#5b1b9e]/20 border-t-[#7c3aed] animate-spin"></div>
+                    <div className="absolute inset-2 rounded-full border-4 border-[#e5b842]/15 border-b-[#fbdf93] animate-spin duration-1000"></div>
                 </div>
                 <p className="text-sm tracking-widest text-slate-400 font-sans uppercase animate-pulse">
                     Loading Next Chapter...
@@ -240,7 +240,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 </header>
 
                 {/* Pages injection */}
-                <main className="flex-1 p-5 md:p-8 pb-24 md:pb-8 max-w-7xl w-full mx-auto">
+                <main className="flex-1 px-7 py-5 md:p-8 pb-24 md:pb-8 max-w-7xl w-full mx-auto">
                     {children}
                 </main>
             </div>

@@ -65,7 +65,7 @@ export default function RootLayout({
           </DatabaseProvider>
         </AuthProvider>
         <PWARegistration />
-        <Toaster theme="dark" position="top-right" closeButton />
+        <Toaster theme="dark" position="top-center" closeButton />
       </body>
     </html>
   );

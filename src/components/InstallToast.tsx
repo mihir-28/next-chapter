@@ -85,7 +85,7 @@ export default function InstallToast() {
       if (toastRef.current) return;
 
       toastRef.current = toast.custom((t) => (
-        <div className="w-full max-w-sm glass-panel border border-white/10 shadow-2xl p-4 flex gap-3 text-left relative overflow-hidden bg-[#0e121d]/95 backdrop-blur-md">
+        <div className="mx-auto w-[calc(100vw-2rem)] max-w-sm glass-panel border border-white/10 shadow-2xl p-4 flex gap-3 text-left relative overflow-hidden bg-[#0e121d]/95 backdrop-blur-md">
           {/* Glow accent */}
           <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-[#0a84ff]/10 blur-xl pointer-events-none"></div>
           
@@ -123,7 +123,7 @@ export default function InstallToast() {
         </div>
       ), {
         duration: Infinity,
-        position: "top-right",
+        position: "top-center",
         onDismiss: () => {
           setDismissed();
           toastRef.current = null;
@@ -135,7 +135,7 @@ export default function InstallToast() {
       if (toastRef.current) return;
 
       toastRef.current = toast.custom((t) => (
-        <div className="w-full max-w-sm glass-panel border border-white/10 shadow-2xl p-4 flex gap-3 text-left relative overflow-hidden bg-[#0e121d]/95 backdrop-blur-md">
+        <div className="mx-auto w-[calc(100vw-2rem)] max-w-sm glass-panel border border-white/10 shadow-2xl p-4 flex gap-3 text-left relative overflow-hidden bg-[#0e121d]/95 backdrop-blur-md">
           {/* Glow accent */}
           <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-[#0a84ff]/10 blur-xl pointer-events-none"></div>
           
@@ -163,7 +163,12 @@ export default function InstallToast() {
                   const activePrompt = window.deferredPrompt || event;
                   if (!activePrompt) {
                     console.error("No active install prompt event found");
-                    toast.error("Install prompt not available. Try reloading the page.");
+                    toast.custom(() => (
+                      <div className="mx-auto w-[calc(100vw-2rem)] max-w-sm rounded-3xl border border-white/10 bg-[#0e121d]/95 p-4 text-left shadow-2xl backdrop-blur-md">
+                        <p className="font-sans text-sm font-bold text-white">Install prompt unavailable</p>
+                        <p className="mt-1 font-body text-xs leading-relaxed text-slate-400">Try reloading the page.</p>
+                      </div>
+                    ), { position: "top-center" });
                     toast.dismiss(t);
                     toastRef.current = null;
                     return;
@@ -192,7 +197,7 @@ export default function InstallToast() {
         </div>
       ), {
         duration: Infinity,
-        position: "top-right",
+        position: "top-center",
         onDismiss: () => {
           setDismissed();
           toastRef.current = null;

@@ -18,6 +18,7 @@ import { format, parseISO } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { showAppToast } from "@/lib/toasts";
 
 
 
@@ -79,7 +80,11 @@ export default function ARCForm({
     if (!file) return;
 
     if (file.size > 800 * 1024) {
-      alert("Cover image must be less than 800KB to ensure smooth syncing.");
+      showAppToast({
+        type: "warning",
+        title: "Cover image is too large",
+        description: "Choose an image under 800KB to keep syncing smooth.",
+      });
       return;
     }
 
@@ -130,7 +135,7 @@ export default function ARCForm({
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 pb-24">
+    <div className="w-full max-w-4xl mx-auto space-y-6 pb-24">
       
       {/* Header back navigation */}
       <div className="flex items-center space-x-3">
@@ -151,7 +156,7 @@ export default function ARCForm({
       )}
 
       {/* Main Form Split Grid */}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
         
         {/* Left Side: Cover Preview & Cover Input */}
         <div className="space-y-4">
@@ -173,7 +178,7 @@ export default function ARCForm({
           </div>
 
           {/* Upload and URL Inputs */}
-          <div className="p-6 glass-panel border border-slate-800/40 space-y-4">
+          <div className="p-5 sm:p-6 glass-panel border border-slate-800/40 space-y-4">
             {/* File Upload */}
             <div>
               <label className="block text-xs font-semibold text-slate-400 mb-2 font-sans cursor-pointer">
@@ -222,7 +227,7 @@ export default function ARCForm({
         <div className="lg:col-span-2 space-y-6">
           
           {/* Section: Basic Details */}
-          <div className="p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-4">
+          <div className="p-5 sm:p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-4">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-sans">Core Details</h3>
             
             {/* Title */}
@@ -298,7 +303,7 @@ export default function ARCForm({
           </div>
 
           {/* Section: Status & Pipeline */}
-          <div className="p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-5">
+          <div className="p-5 sm:p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-5">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-sans">Reading Pipeline</h3>
 
             {/* Reading Status Pill Selector */}
@@ -411,7 +416,7 @@ export default function ARCForm({
           </div>
 
           {/* Section: Optional Meta Data (Release, Notes, Rating, Link) */}
-          <div className="p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-4">
+          <div className="p-5 sm:p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-4">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-sans">Additional Information</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -4,6 +4,7 @@ import React, { use } from "react";
 import { useRouter } from "next/navigation";
 import { useDatabase, NewARCData } from "@/context/DatabaseContext";
 import ARCForm from "@/components/ARCForm";
+import { showAppToast, showConfirmToast } from "@/lib/toasts";
 
 interface EditARCPageProps {
   params: Promise<{ id: string }>;
@@ -22,18 +23,24 @@ export default function EditARCPage({ params }: EditARCPageProps) {
   };
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete "${arc?.title}" from your pipeline?`
-    );
-    if (confirmDelete) {
-      try {
-        await deleteARC(id);
-        router.push("/");
-      } catch (err) {
-        console.error("Failed to delete ARC: ", err);
-        alert("Failed to delete ARC.");
-      }
-    }
+    showConfirmToast({
+      title: "Delete this ARC?",
+      description: `"${arc?.title}" will be removed from your pipeline.`,
+      confirmLabel: "Delete ARC",
+      onConfirm: async () => {
+        try {
+          await deleteARC(id);
+          router.push("/");
+        } catch (err) {
+          console.error("Failed to delete ARC: ", err);
+          showAppToast({
+            type: "error",
+            title: "Failed to delete ARC",
+            description: "Please try again in a moment.",
+          });
+        }
+      },
+    });
   };
 
   if (loading) {

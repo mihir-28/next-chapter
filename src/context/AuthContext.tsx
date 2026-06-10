@@ -8,6 +8,7 @@ import {
   onAuthStateChanged 
 } from "firebase/auth";
 import { auth, googleProvider, hasFirebaseConfig } from "@/lib/firebase";
+import { showAppToast } from "@/lib/toasts";
 
 interface AuthContextType {
   user: User | null;
@@ -42,7 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signInWithGoogle = async () => {
     if (!hasFirebaseConfig) {
-      alert("Firebase is not configured. Please add your credentials in .env.local");
+      showAppToast({
+        type: "warning",
+        title: "Firebase is not configured",
+        description: "Add your credentials in .env.local before signing in.",
+      });
       return;
     }
     try {
