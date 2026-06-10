@@ -35,6 +35,9 @@ export interface ARC {
   notes?: string;
   rating?: number; // 0-5
   reviewLink?: string;
+  goodreadsUrl?: string;
+  storygraphUrl?: string;
+  amazonUrl?: string;
   
   // Scoping
   ownerId: string;

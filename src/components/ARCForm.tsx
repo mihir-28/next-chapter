@@ -19,6 +19,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
+
+
 interface ARCFormProps {
   initialData?: ARC;
   onSubmit: (data: NewARCData) => Promise<void>;
@@ -53,6 +55,9 @@ export default function ARCForm({
   const [notes, setNotes] = useState(initialData?.notes || "");
   const [rating, setRating] = useState<number>(initialData?.rating || 0);
   const [reviewLink, setReviewLink] = useState(initialData?.reviewLink || "");
+  const [goodreadsUrl, setGoodreadsUrl] = useState(initialData?.goodreadsUrl || "");
+  const [storygraphUrl, setStorygraphUrl] = useState(initialData?.storygraphUrl || "");
+  const [amazonUrl, setAmazonUrl] = useState(initialData?.amazonUrl || "");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,6 +114,9 @@ export default function ARCForm({
       notes: notes.trim() || "",
       rating: readingStatus === "Finished" && rating > 0 ? rating : 0,
       reviewLink: reviewStatus === "Published" || reviewStatus === "Submitted" ? reviewLink.trim() : "",
+      goodreadsUrl: (readingStatus === "Finished" || reviewStatus === "Published" || reviewStatus === "Submitted") ? goodreadsUrl.trim() : "",
+      storygraphUrl: (readingStatus === "Finished" || reviewStatus === "Published" || reviewStatus === "Submitted") ? storygraphUrl.trim() : "",
+      amazonUrl: (readingStatus === "Finished" || reviewStatus === "Published" || reviewStatus === "Submitted") ? amazonUrl.trim() : "",
     };
 
     try {
@@ -517,6 +525,75 @@ export default function ARCForm({
                     onChange={(e) => setReviewLink(e.target.value)}
                     className="w-full pl-10 pr-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/35 outline-none text-slate-200 text-xs font-body"
                   />
+                </div>
+              </div>
+            )}
+
+            {/* Platform Review Links (Shown when book is Finished or Review is Submitted/Published) */}
+            {(readingStatus === "Finished" || reviewStatus === "Published" || reviewStatus === "Submitted") && (
+              <div className="space-y-4 pt-3 border-t border-slate-800/40">
+                <div className="flex items-center space-x-2">
+                  <LinkIcon className="w-3.5 h-3.5 text-blue-400" />
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-sans">Review Platform URLs</h4>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  {/* Goodreads URL */}
+                  <div>
+                    <label className="flex items-center text-xs font-semibold text-slate-355 mb-1.5 font-sans">
+                      <img src="/assets/goodreads.png" alt="Goodreads" className="w-4.5 h-4.5 mr-2 shrink-0 object-contain rounded-lg" />
+                      <span>Goodreads Review URL</span>
+                    </label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                      <input
+                        type="url"
+                        placeholder="https://www.goodreads.com/review/show/..."
+                        value={goodreadsUrl}
+                        onChange={(e) => setGoodreadsUrl(e.target.value)}
+                        className="w-full pl-10 pr-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/35 outline-none text-slate-200 text-xs font-body"
+                      />
+                    </div>
+                  </div>
+
+                  {/* StoryGraph URL */}
+                  <div>
+                    <label className="flex items-center text-xs font-semibold text-slate-355 mb-1.5 font-sans">
+                      <div className="w-4.5 h-4.5 mr-2 shrink-0 bg-white rounded-lg flex items-center justify-center overflow-hidden p-0.5">
+                        <img src="/assets/storygraph.png" alt="StoryGraph" className="w-full h-full object-contain" />
+                      </div>
+                      <span>StoryGraph Review URL</span>
+                    </label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                      <input
+                        type="url"
+                        placeholder="https://app.thestorygraph.com/reviews/..."
+                        value={storygraphUrl}
+                        onChange={(e) => setStorygraphUrl(e.target.value)}
+                        className="w-full pl-10 pr-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/35 outline-none text-slate-200 text-xs font-body"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Amazon URL */}
+                  <div>
+                    <label className="flex items-center text-xs font-semibold text-slate-355 mb-1.5 font-sans">
+                      <div className="w-4.5 h-4.5 mr-2 shrink-0 bg-white rounded-lg flex items-center justify-center overflow-hidden p-0.5">
+                        <img src="/assets/amazon.png" alt="Amazon" className="w-full h-full object-contain" />
+                      </div>
+                      <span>Amazon Review URL</span>
+                    </label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                      <input
+                        type="url"
+                        placeholder="https://www.amazon.com/review/..."
+                        value={amazonUrl}
+                        onChange={(e) => setAmazonUrl(e.target.value)}
+                        className="w-full pl-10 pr-3 py-2.5 rounded-2xl bg-slate-900 border border-slate-850 focus:border-blue-500/35 outline-none text-slate-200 text-xs font-body"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
