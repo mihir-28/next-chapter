@@ -21,6 +21,8 @@ Next Chapter helps reviewers keep track of Advance Reader Copies (ARCs), reading
 
 Built as a mobile-first Progressive Web App (PWA), it provides a focused workspace for managing your reading queue and ensuring no review deadline slips through the cracks.
 
+"Next Chapter Banner" (./public/og-og.png)
+
 ---
 
 ## Features
