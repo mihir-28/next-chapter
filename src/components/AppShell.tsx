@@ -317,6 +317,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                             {pathname === "/add" && (
                                 <motion.div
                                     layoutId="activeMobileTab"
+                                    layout="x"
                                     className="absolute inset-2.25 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full"
                                     style={{ zIndex: -1 }}
                                     transition={{

@@ -10,18 +10,34 @@ import {
   CheckCircle2, 
   Calendar, 
   ChevronRight, 
-  Layers
+  Check,
+  Loader2
 } from "lucide-react";
-import { useDatabase } from "@/context/DatabaseContext";
+import { useDatabase, ARC } from "@/context/DatabaseContext";
 import { useAuth } from "@/context/AuthContext";
 import { getDaysRemaining, getUrgencyInfo } from "@/lib/dateUtils";
 import BookCover from "@/components/BookCover";
 import Logo from "@/components/Logo";
 
 export default function DashboardPage() {
-  const { arcs, loading } = useDatabase();
+  const { arcs, loading, updateARC } = useDatabase();
   const { user } = useAuth();
   const router = useRouter();
+
+  const handleUpdateProgress = async (id: string, progress: number, status?: "Currently Reading" | "Finished") => {
+    try {
+      const updateData: Partial<ARC> = { progress };
+      if (status) {
+        updateData.readingStatus = status;
+        if (status === "Finished") {
+          updateData.dateFinished = new Date().toISOString().split("T")[0];
+        }
+      }
+      await updateARC(id, updateData);
+    } catch (error) {
+      console.error("Failed to update progress:", error);
+    }
+  };
 
   // Loading skeleton screen
   if (loading) {
@@ -51,9 +67,11 @@ export default function DashboardPage() {
     (a) => a.readingStatus !== "DNF" && a.reviewStatus !== "Published"
   ).length;
 
-  const readingCount = arcs.filter(
+  const currentlyReadingARCs = arcs.filter(
     (a) => a.readingStatus === "Currently Reading"
-  ).length;
+  );
+
+  const readingCount = currentlyReadingARCs.length;
 
   const reviewsPendingCount = arcs.filter(
     (a) => a.readingStatus === "Finished" && a.reviewStatus !== "Published"
@@ -99,7 +117,7 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-6">
       <title>Dashboard | Next Chapter ARC Tracker</title>
       <meta name="description" content="Manage your Advance Reader Copies, track review deadlines, and monitor your reading progress." />
       {/* Top Welcome Header */}
@@ -177,7 +195,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left Side: Upcoming Deadlines */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="order-2 lg:order-1 lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold tracking-tight text-white font-sans">
               Upcoming Deadlines
@@ -218,7 +236,7 @@ export default function DashboardPage() {
                   <div 
                     key={arc.id}
                     onClick={() => router.push(`/edit/${arc.id}`)}
-                    className="p-4 rounded-2xl glass-card hover:border-blue-500/20 flex items-center justify-between gap-4 cursor-pointer"
+                    className="p-3.5 h-24 rounded-2xl glass-card hover:border-blue-500/20 flex items-center justify-between gap-4 cursor-pointer"
                   >
                     {/* Cover Mini */}
                     <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-850/65 shadow-md">
@@ -226,13 +244,13 @@ export default function DashboardPage() {
                     </div>
                     
                     {/* Book Details */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 flex flex-col justify-center h-full">
                       <h4 className="font-bold text-sm text-white truncate leading-tight font-sans">{arc.title}</h4>
                       <p className="text-slate-455 text-xs truncate mt-0.5 font-body">by {arc.author}</p>
                       
                       {/* Progress bar inside card for simple tracking */}
                       {arc.readingStatus === "Currently Reading" && (
-                        <div className="w-full max-w-30 mt-2">
+                        <div className="w-full max-w-30 mt-1.5">
                           <div className="flex justify-between items-center text-[8px] text-slate-550 font-bold mb-0.5">
                             <span>READING</span>
                             <span>{arc.progress || 0}%</span>
@@ -248,7 +266,7 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Deadline & Status Badge */}
-                    <div className="flex flex-col items-end gap-1 shrink-0">
+                    <div className="flex flex-col items-end gap-1 shrink-0 justify-center h-full">
                       <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wider ${urgency.colorClass} ${urgency.borderClass}`}>
                         {urgency.label}
                       </span>
@@ -263,57 +281,162 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Right Side: Quick Action & Reading Progress */}
-        <div className="space-y-4">
+        {/* Right Side: Currently Reading */}
+        <div className="order-1 lg:order-2 lg:col-span-1 space-y-4 animate-fade-in">
           <h2 className="text-xl font-bold tracking-tight text-white font-sans">
-            Reading Hub
+            Currently Reading
           </h2>
 
-          <div className="p-6 rounded-2xl glass-panel border border-slate-800/40 space-y-5">
-            <h3 className="text-sm font-bold text-slate-200 tracking-wide uppercase font-sans">
-              Pipeline Links
-            </h3>
-            
-            <div className="space-y-3">
-              <Link
-                href="/kanban"
-                className="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 hover:bg-slate-850/40 border border-slate-850 transition-all group"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
-                    <Layers className="w-5 h-5" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-bold text-white">Review Kanban</p>
-                    <p className="text-xs text-slate-400 mt-0.5">Drag & drop columns</p>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors" />
-              </Link>
-
+          {currentlyReadingARCs.length === 0 ? (
+            <div className="p-6 rounded-2xl glass-panel border border-white/5 text-center flex flex-col items-center py-8 relative overflow-hidden">
+              <div className="absolute -top-12 -left-12 w-24 h-24 bg-[#7c3aed]/5 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-[#e5b842]/5 rounded-full blur-xl"></div>
+              <BookOpen className="w-10 h-10 text-slate-500 mb-3" />
+              <h3 className="text-sm font-bold text-white font-sans mb-1">No Active Books</h3>
+              <p className="text-slate-400 text-xs max-w-50 mb-4 font-body leading-normal">
+                You aren&apos;t reading any books right now. Set a book to &quot;Currently Reading&quot; to track progress here.
+              </p>
               <Link
                 href="/library"
-                className="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 hover:bg-slate-850/40 border border-slate-850 transition-all group"
+                className="py-2 px-4 rounded-full bg-linear-to-r from-[#7c3aed]/20 to-[#e5b842]/20 hover:from-[#7c3aed]/30 hover:to-[#e5b842]/30 border border-[#e5b842]/30 hover:border-[#fbdf93]/60 text-[#fbdf93] font-bold text-xs transition-all duration-300 cursor-pointer"
               >
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-lg bg-sky-500/10 text-sky-400">
-                    <BookOpen className="w-5 h-5" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-bold text-white">All ARCs</p>
-                    <p className="text-xs text-slate-400 mt-0.5">Library card shelf</p>
-                  </div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors" />
+                Browse Shelf
               </Link>
             </div>
-            
-            <div className="p-4 rounded-xl bg-blue-950/10 border border-blue-900/20 text-xs text-blue-300 font-body leading-relaxed">
-              💡 <span className="font-semibold text-slate-200">Tip:</span> Ensure you update your review links once published! It keeps your Active ARC count clean.
+          ) : (
+            <div className="space-y-3">
+              {currentlyReadingARCs.map((arc) => (
+                <CurrentlyReadingCard
+                  key={arc.id}
+                  arc={arc}
+                  onUpdate={handleUpdateProgress}
+                />
+              ))}
             </div>
-          </div>
+          )}
         </div>
         
+      </div>
+    </div>
+  );
+}
+
+interface CurrentlyReadingCardProps {
+  arc: ARC;
+  onUpdate: (id: string, progress: number, status?: "Currently Reading" | "Finished") => Promise<void>;
+}
+
+function CurrentlyReadingCard({ arc, onUpdate }: CurrentlyReadingCardProps) {
+  const [inputValue, setInputValue] = React.useState<string>(String(arc.progress || 0));
+  const [prevProgress, setPrevProgress] = React.useState<number>(arc.progress || 0);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [isSaved, setIsSaved] = React.useState(false);
+
+  // Sync state if database progress changes
+  if ((arc.progress || 0) !== prevProgress) {
+    setPrevProgress(arc.progress || 0);
+    setInputValue(String(arc.progress || 0));
+  }
+
+  const progressNum = parseInt(inputValue, 10);
+  const hasChanged = !isNaN(progressNum) && progressNum !== (arc.progress || 0) && progressNum >= 0 && progressNum <= 100;
+
+  const handleSave = async () => {
+    if (isNaN(progressNum) || progressNum < 0 || progressNum > 100) return;
+    
+    setIsSaving(true);
+    try {
+      if (progressNum === 100) {
+        await onUpdate(arc.id, 100, "Finished");
+      } else {
+        await onUpdate(arc.id, progressNum, "Currently Reading");
+      }
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 2000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && hasChanged) {
+      handleSave();
+    }
+  };
+
+  const urgency = getUrgencyInfo(arc.deadline, false);
+
+  return (
+    <div className="p-3.5 h-24 rounded-2xl glass-card hover:border-[#7c3aed]/30 flex items-center justify-between gap-4">
+      {/* Cover Mini */}
+      <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-800/40 shadow-md">
+        <BookCover title={arc.title} author={arc.author} coverUrl={arc.coverUrl} size="sm" />
+      </div>
+
+      {/* Book Details & Progress Input */}
+      <div className="flex-1 min-w-0 flex flex-col justify-center h-full">
+        <h4 className="font-bold text-sm text-white truncate leading-tight font-sans">{arc.title}</h4>
+        <p className="text-slate-400 text-xs truncate mt-0.5 font-body">by {arc.author}</p>
+        
+        {/* Progress Input Row */}
+        <div className="flex items-center space-x-2 mt-1.5">
+          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider font-sans">Progress:</span>
+          <div className="relative flex items-center">
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={isSaving}
+              className="w-12 bg-slate-950/60 border border-[#e5b842]/20 focus:border-[#7c3aed] text-white text-xs font-bold px-1.5 py-1 rounded-lg focus:outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
+            <span className="text-xs text-slate-400 font-bold ml-1">%</span>
+          </div>
+
+          {/* Tick Save Button */}
+          {hasChanged && (
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="p-1 rounded-lg bg-[#7c3aed]/20 hover:bg-[#7c3aed]/40 border border-[#e5b842]/40 hover:border-[#fbdf93]/80 text-[#fbdf93] active:scale-95 shadow-sm transition-all cursor-pointer flex items-center justify-center w-6 h-6 shrink-0"
+              title="Save changes"
+            >
+              {isSaving ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Check className="w-3.5 h-3.5" style={{ strokeWidth: 3.5 }} />
+              )}
+            </button>
+          )}
+
+          {/* Saved Indicator */}
+          {isSaved && !hasChanged && (
+            <span className="text-[10px] text-emerald-400 font-bold flex items-center space-x-1">
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Saved</span>
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Days left badge / Complete Trigger */}
+      <div className="flex flex-col items-end shrink-0 gap-1.5 justify-center h-full">
+        <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wider ${urgency.colorClass} ${urgency.borderClass}`}>
+          {urgency.label}
+        </span>
+        {progressNum === 100 && hasChanged && (
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="text-[9px] font-extrabold text-[#fbdf93] bg-[#7c3aed]/20 hover:bg-[#7c3aed]/40 border border-[#e5b842]/45 rounded-full px-2 py-0.5 cursor-pointer transition-colors"
+          >
+            Finish Book
+          </button>
+        )}
       </div>
     </div>
   );
