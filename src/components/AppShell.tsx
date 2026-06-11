@@ -288,12 +288,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                                             <motion.div
                                                 layoutId="activeMobileTab"
                                                 layout="x"
-                                                className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full"
+                                                className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full will-change-transform"
                                                 style={{ zIndex: -1 }}
                                                 transition={{
                                                     type: "spring",
-                                                    stiffness: 350,
-                                                    damping: 26,
+                                                    stiffness: 380,
+                                                    damping: 30,
                                                 }}
                                             />
                                         )}
@@ -318,12 +318,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                                 <motion.div
                                     layoutId="activeMobileTab"
                                     layout="x"
-                                    className="absolute inset-2.25 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full"
+                                    className="absolute inset-y-2.5 inset-x-2.5 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full will-change-transform"
                                     style={{ zIndex: -1 }}
                                     transition={{
                                         type: "spring",
-                                        stiffness: 350,
-                                        damping: 26,
+                                        stiffness: 380,
+                                        damping: 30,
                                     }}
                                 />
                             )}
