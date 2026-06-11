@@ -43,6 +43,7 @@ function GoogleMark({ className = "w-5 h-5" }: { className?: string }) {
 export default function AppShell({ children }: { children: React.ReactNode }) {
     const { user, loading, signInWithGoogle, logOut } = useAuth();
     const pathname = usePathname();
+    const activeIndex = ["/", "/library", "/kanban", "/add"].indexOf(pathname);
 
     // Reset scroll to top on route change
     useEffect(() => {
@@ -226,9 +227,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 <header className="md:hidden flex items-center justify-between px-6 py-4 sticky top-0 z-40">
                     <div className="flex items-center space-x-2.5">
                         <Logo
-                            size={28}
+                            size={38}
                             showBackground={true}
-                            className="rounded-lg border border-white/5 shadow-sm shrink-0"
+                            className="rounded-full border border-white/5 shadow-sm shrink-0"
                         />
                         <span className="text-lg font-bold tracking-tight text-white font-sans bg-clip-text bg-linear-to-r from-white via-slate-100 to-sky-200">
                             Next Chapter
@@ -253,9 +254,34 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
             {/* Floating Navigation Dock for Mobile Devices (visionOS style) */}
             <div className="md:hidden fixed bottom-6 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-                <div className="flex items-center gap-3.5 max-w-sm w-full pointer-events-auto">
-                    {/* Main Navigation Pill */}
-                    <div className="flex-1 flex items-center gap-1.5 px-3 py-2 rounded-full! glass-panel backdrop-blur-sm shadow-2xl border border-white/10 justify-between">
+                <div 
+                    className="relative flex items-center gap-3.5 max-w-sm w-full pointer-events-auto h-16"
+                    style={{ containerType: "inline-size" }}
+                >
+                    {/* Glass Panel Background for Main Navigation Pill */}
+                    <div className="absolute left-0 top-0 bottom-0 w-[calc(100%-78px)] glass-panel backdrop-blur-sm shadow-2xl border border-white/10 rounded-full! pointer-events-none" style={{ zIndex: 0 }} />
+
+                    {/* Glass Panel Background for Solo Add Button */}
+                    <div className="absolute right-0 top-0 bottom-0 w-16 glass-panel backdrop-blur-sm shadow-2xl border border-white/10 rounded-full! pointer-events-none" style={{ zIndex: 0 }} />
+
+                    {/* Active background capsule with GPU-accelerated translate3d */}
+                    {activeIndex !== -1 && (
+                        <div
+                            className="absolute bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,width,height] pointer-events-none"
+                            style={{
+                                zIndex: 1,
+                                height: "48px",
+                                width: activeIndex === 3 ? "48px" : "calc((100cqw - 114px) / 3)",
+                                top: "8px",
+                                transform: activeIndex === 3
+                                    ? "translate3d(calc(100cqw - 56px), 0, 0)"
+                                    : `translate3d(calc(12px + ${activeIndex} * (100cqw - 114px) / 3 + ${activeIndex} * 6px), 0, 0)`,
+                            }}
+                        />
+                    )}
+
+                    {/* Main Navigation Pill Content Wrapper */}
+                    <div className="relative flex-1 flex items-center gap-1.5 px-3 py-2 rounded-full! justify-between" style={{ zIndex: 2 }}>
                         {navItems
                             .filter((item) => item.href !== "/add")
                             .map((item) => {
@@ -283,20 +309,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                                         }`}
                                         style={isActive ? { textShadow: "0 0 8px rgba(251, 223, 147, 0.25)" } : undefined}
                                     >
-                                        {/* Active background capsule with spring motion */}
-                                        {isActive && (
-                                            <motion.div
-                                                layoutId="activeMobileTab"
-                                                layout="x"
-                                                className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full will-change-transform"
-                                                style={{ zIndex: -1 }}
-                                                transition={{
-                                                    type: "spring",
-                                                    stiffness: 380,
-                                                    damping: 30,
-                                                }}
-                                            />
-                                        )}
                                         <Icon className={`w-5.5 h-5.5 transition-all duration-300 ${iconColor} ${isActive ? "scale-110 drop-shadow-[0_0_6px_rgba(251,223,147,0.15)]" : "scale-100"}`} />
                                         <span className="text-[8px] mt-0.5 font-bold uppercase tracking-wider scale-90">
                                             {item.name.replace("Dashboard", "Home")}
@@ -306,27 +318,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                             })}
                     </div>
 
-                    {/* Solo Add Button */}
-                    <div className="w-17 h-17 glass-panel backdrop-blur-sm shadow-2xl border border-white/10 rounded-full! flex items-center justify-center shrink-0">
+                    {/* Solo Add Button Content Wrapper */}
+                    <div className="relative w-16 h-16 flex items-center justify-center shrink-0" style={{ zIndex: 2 }}>
                         <Link
                             href="/add"
                             className="relative w-full h-full rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer"
                             title="Add ARC"
                         >
-                            {/* Active background capsule with spring motion */}
-                            {pathname === "/add" && (
-                                <motion.div
-                                    layoutId="activeMobileTab"
-                                    layout="x"
-                                    className="absolute inset-y-2.5 inset-x-2.5 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full will-change-transform"
-                                    style={{ zIndex: -1 }}
-                                    transition={{
-                                        type: "spring",
-                                        stiffness: 380,
-                                        damping: 30,
-                                    }}
-                                />
-                            )}
                             <Plus 
                                 className={`w-6 h-6 transition-all duration-300 text-[#b58dfa] ${
                                     pathname === "/add" 

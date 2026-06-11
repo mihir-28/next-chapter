@@ -184,7 +184,6 @@ export default function KanbanPage() {
       {/* Header Info */}
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans flex items-center space-x-3">
-          <Logo size={32} showBackground={true} className="rounded-lg shrink-0 border border-white/5 shadow-sm" />
           <span>Review Board</span>
         </h1>
         <p className="text-slate-400 text-xs mt-1 font-body">
