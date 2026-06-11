@@ -38,6 +38,7 @@ export interface ARC {
   goodreadsUrl?: string;
   storygraphUrl?: string;
   amazonUrl?: string;
+  dateFinished?: string; // YYYY-MM-DD
   
   // Scoping
   ownerId: string;

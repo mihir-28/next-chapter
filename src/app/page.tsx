@@ -10,7 +10,6 @@ import {
   CheckCircle2, 
   Calendar, 
   ChevronRight, 
-  Plus,
   Layers
 } from "lucide-react";
 import { useDatabase } from "@/context/DatabaseContext";
@@ -104,22 +103,13 @@ export default function DashboardPage() {
       <title>Dashboard | Next Chapter ARC Tracker</title>
       <meta name="description" content="Manage your Advance Reader Copies, track review deadlines, and monitor your reading progress." />
       {/* Top Welcome Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans sm:text-4xl">
-            {getGreeting()}, {user?.displayName?.split(" ")[0] || "Reader"}!
-          </h1>
-          <p className="text-slate-400 text-sm mt-1 font-body">
-            Here is your review pipeline summary for {todayDateFormatted}.
-          </p>
-        </div>
-        <Link
-          href="/add"
-          className="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-full bg-linear-to-r from-[#2e0854] via-[#5b1b9e] to-[#7c3aed] bg-clip-padding border border-[#e5b842]/30 hover:border-[#fbdf93]/80 text-[#fbdf93] font-semibold text-sm tracking-wide shadow-lg shadow-purple-950/50 hover:shadow-[0_0_22px_rgba(124,58,237,0.3)] hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 cursor-pointer w-full sm:w-auto"
-        >
-          <Plus className="w-5 h-5 text-[#fbdf93] stroke-[2.5]" />
-          <span>Add New ARC</span>
-        </Link>
+      <div>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans sm:text-4xl">
+          {getGreeting()}, {user?.displayName?.split(" ")[0] || "Reader"}!
+        </h1>
+        <p className="text-slate-400 text-sm mt-1 font-body">
+          Here is your review pipeline summary for {todayDateFormatted}.
+        </p>
       </div>
 
       {/* Grid of stats */}

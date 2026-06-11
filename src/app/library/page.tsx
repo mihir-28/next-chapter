@@ -5,11 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, 
   SlidersHorizontal,
-  Plus,
   ChevronDown
 } from "lucide-react";
 import Link from "next/link";
-import { useDatabase, ReadingStatus, ReviewStatus } from "@/context/DatabaseContext";
+import { useDatabase, ReadingStatus, ReviewStatus, ARC } from "@/context/DatabaseContext";
 import ARCCard from "@/components/ARCCard";
 import { getDaysRemaining } from "@/lib/dateUtils";
 import Logo from "@/components/Logo";
@@ -49,8 +48,63 @@ export default function LibraryPage() {
       result = result.filter((arc) => arc.reviewStatus === selectedReviewStatus);
     }
 
+    // Helper to determine status category weight for ordering
+    const getCategoryWeight = (arc: ARC) => {
+      const isFinished = arc.readingStatus === "Finished" || arc.reviewStatus === "Published";
+      if (isFinished) {
+        return arc.readingStatus === "DNF" ? 5 : 4;
+      }
+      
+      const daysRemaining = getDaysRemaining(arc.deadline);
+      if (daysRemaining < 0) {
+        return 1; // Overdue
+      }
+      
+      if (arc.readingStatus === "Currently Reading") {
+        return 2; // Currently Reading
+      }
+      
+      return 3; // To Read (includes other active states like To Read)
+    };
+
     // 4. Sorting logic
     result.sort((a, b) => {
+      const weightA = getCategoryWeight(a);
+      const weightB = getCategoryWeight(b);
+
+      // Group by status hierarchy first
+      if (weightA !== weightB) {
+        return weightA - weightB;
+      }
+
+      // If they belong to the same category, apply the sorting logic within that category
+      if (weightA === 4) {
+        // Finished books: sort by recently finished to older ones (newest finished first)
+        if (a.dateFinished && b.dateFinished) {
+          return b.dateFinished.localeCompare(a.dateFinished);
+        }
+        // Fallback: recently updated or created
+        const timeA = a.updatedAt instanceof Date ? a.updatedAt.getTime() : 0;
+        const timeB = b.updatedAt instanceof Date ? b.updatedAt.getTime() : 0;
+        if (timeA !== timeB) return timeB - timeA;
+
+        const createA = a.createdAt instanceof Date ? a.createdAt.getTime() : 0;
+        const createB = b.createdAt instanceof Date ? b.createdAt.getTime() : 0;
+        return createB - createA;
+      }
+
+      // DNF books (weight 5): sort by recently updated/created
+      if (weightA === 5) {
+        const timeA = a.updatedAt instanceof Date ? a.updatedAt.getTime() : 0;
+        const timeB = b.updatedAt instanceof Date ? b.updatedAt.getTime() : 0;
+        if (timeA !== timeB) return timeB - timeA;
+
+        const createA = a.createdAt instanceof Date ? a.createdAt.getTime() : 0;
+        const createB = b.createdAt instanceof Date ? b.createdAt.getTime() : 0;
+        return createB - createA;
+      }
+
+      // Active categories (Overdue, Currently Reading, To Read): sort by chosen sortBy
       switch (sortBy) {
         case "nearest-deadline":
           return getDaysRemaining(a.deadline) - getDaysRemaining(b.deadline);
@@ -59,17 +113,15 @@ export default function LibraryPage() {
           return getDaysRemaining(b.deadline) - getDaysRemaining(a.deadline);
         
         case "release-date":
-          // Place items with missing release dates at the end
           if (!a.releaseDate) return 1;
           if (!b.releaseDate) return -1;
           return a.releaseDate.localeCompare(b.releaseDate);
         
         case "recently-added":
         default:
-          // Firebase Date comparison (safely handle timestamps)
           const timeA = a.createdAt instanceof Date ? a.createdAt.getTime() : 0;
           const timeB = b.createdAt instanceof Date ? b.createdAt.getTime() : 0;
-          return timeB - timeA; // Newest first
+          return timeB - timeA;
       }
     });
 
@@ -107,22 +159,13 @@ export default function LibraryPage() {
       <title>Library | Next Chapter ARC Tracker</title>
       <meta name="description" content="Browse, search, filter, and sort your entire Advance Reader Copy (ARC) collection." />
       {/* Header section */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans">
-            ARC Library
-          </h1>
-          <p className="text-slate-400 text-xs mt-1 font-body">
-            Manage and filter your entire {arcs.length} book collection.
-          </p>
-        </div>
-        <Link
-          href="/add"
-          className="p-3 rounded-full bg-linear-to-r from-[#2e0854] via-[#5b1b9e] to-[#7c3aed] bg-clip-padding border border-[#e5b842]/30 hover:border-[#fbdf93]/80 text-[#fbdf93] font-semibold text-sm shadow-md flex items-center justify-center hover:shadow-[0_0_22px_rgba(124,58,237,0.3)] hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 cursor-pointer"
-          title="Add ARC"
-        >
-          <Plus className="w-5 h-5 text-[#fbdf93] stroke-[2.5]" />
-        </Link>
+      <div>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white font-sans">
+          ARC Library
+        </h1>
+        <p className="text-slate-400 text-xs mt-1 font-body">
+          Manage and filter your entire {arcs.length} book collection.
+        </p>
       </div>
 
       {/* Search Bar & Filter Toggle */}

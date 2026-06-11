@@ -122,10 +122,15 @@ export default function KanbanPage() {
           delete updates.progress; // keep existing progress
         }
         break;
-      case "finished":
+      case "finished": {
+        const todayF = new Date();
+        const yyyyF = todayF.getFullYear();
+        const mmF = String(todayF.getMonth() + 1).padStart(2, "0");
+        const ddF = String(todayF.getDate()).padStart(2, "0");
         updates = {
           readingStatus: "Finished",
           progress: 100,
+          dateFinished: `${yyyyF}-${mmF}-${ddF}`,
         };
         // Set review status to Drafted if not started
         const currentF = arcs.find((a) => a.id === arcId);
@@ -133,13 +138,23 @@ export default function KanbanPage() {
           updates.reviewStatus = "Drafted";
         }
         break;
-      case "reviewed":
+      }
+      case "reviewed": {
         updates = {
           readingStatus: "Finished",
           reviewStatus: "Published",
           progress: 100,
         };
+        const currentR = arcs.find((a) => a.id === arcId);
+        if (currentR && !currentR.dateFinished) {
+          const todayR = new Date();
+          const yyyyR = todayR.getFullYear();
+          const mmR = String(todayR.getMonth() + 1).padStart(2, "0");
+          const ddR = String(todayR.getDate()).padStart(2, "0");
+          updates.dateFinished = `${yyyyR}-${mmR}-${ddR}`;
+        }
         break;
+      }
     }
 
     try {

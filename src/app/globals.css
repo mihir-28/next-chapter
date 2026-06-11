@@ -109,7 +109,6 @@ body {
     0 0 30px -5px rgba(244, 63, 94, 0.12);
 }
 
-
 /* Custom Scrollbar for list scrollings */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
@@ -138,3 +137,5 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+

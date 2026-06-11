@@ -55,6 +55,7 @@ export default function ARCForm({
   const [progress, setProgress] = useState<number>(initialData?.progress || 0);
   const [notes, setNotes] = useState(initialData?.notes || "");
   const [rating, setRating] = useState<number>(initialData?.rating || 0);
+  const [dateFinished, setDateFinished] = useState(initialData?.dateFinished || "");
   const [reviewLink, setReviewLink] = useState(initialData?.reviewLink || "");
   const [goodreadsUrl, setGoodreadsUrl] = useState(initialData?.goodreadsUrl || "");
   const [storygraphUrl, setStorygraphUrl] = useState(initialData?.storygraphUrl || "");
@@ -62,6 +63,21 @@ export default function ARCForm({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const setStatusAsFinished = () => {
+    setReadingStatus("Finished");
+    setProgress(100);
+    if (!dateFinished) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      setDateFinished(`${yyyy}-${mm}-${dd}`);
+    }
+    if (reviewStatus === "Not Started") {
+      setReviewStatus("Drafted");
+    }
+  };
 
   const handleDateChange = (date: Date | undefined, setter: (val: string) => void) => {
     if (!date) {
@@ -118,6 +134,7 @@ export default function ARCForm({
       progress: readingStatus === "Currently Reading" || readingStatus === "Finished" ? progress : 0,
       notes: notes.trim() || "",
       rating: readingStatus === "Finished" && rating > 0 ? rating : 0,
+      dateFinished: readingStatus === "Finished" ? dateFinished : "",
       reviewLink: reviewStatus === "Published" || reviewStatus === "Submitted" ? reviewLink.trim() : "",
       goodreadsUrl: (readingStatus === "Finished" || reviewStatus === "Published" || reviewStatus === "Submitted") ? goodreadsUrl.trim() : "",
       storygraphUrl: (readingStatus === "Finished" || reviewStatus === "Published" || reviewStatus === "Submitted") ? storygraphUrl.trim() : "",
@@ -315,16 +332,15 @@ export default function ARCForm({
                     key={status}
                     type="button"
                     onClick={() => {
-                      setReadingStatus(status);
                       if (status === "Finished") {
-                        setProgress(100);
-                        if (reviewStatus === "Not Started") {
-                          setReviewStatus("Drafted");
+                        setStatusAsFinished();
+                      } else {
+                        setReadingStatus(status);
+                        if (status === "To Read") {
+                          setProgress(0);
+                        } else if (status === "Currently Reading" && progress === 0) {
+                          setProgress(10);
                         }
-                      } else if (status === "To Read") {
-                        setProgress(0);
-                      } else if (status === "Currently Reading" && progress === 0) {
-                        setProgress(10);
                       }
                     }}
                     className={`flex items-center justify-center text-center px-2 py-1.5 min-h-11 h-auto rounded-2xl text-[10px] sm:text-xs font-bold border cursor-pointer transition-all duration-300 leading-tight ${
@@ -384,10 +400,7 @@ export default function ARCForm({
                       const val = Number(e.target.value);
                       setProgress(val);
                       if (val === 100 && readingStatus !== "Finished") {
-                        setReadingStatus("Finished");
-                        if (reviewStatus === "Not Started") {
-                          setReviewStatus("Drafted");
-                        }
+                        setStatusAsFinished();
                       }
                     }}
                     className="flex-1 accent-blue-500 bg-slate-900 h-2 rounded-lg cursor-pointer"
@@ -402,10 +415,7 @@ export default function ARCForm({
                       const val = Math.min(100, Math.max(0, Number(e.target.value)));
                       setProgress(val);
                       if (val === 100 && readingStatus !== "Finished") {
-                        setReadingStatus("Finished");
-                        if (reviewStatus === "Not Started") {
-                          setReviewStatus("Drafted");
-                        }
+                        setStatusAsFinished();
                       }
                     }}
                     className="w-16 bg-slate-900 border border-slate-850 rounded-2xl px-2 py-1 text-center text-xs font-bold text-slate-200"
@@ -487,30 +497,64 @@ export default function ARCForm({
               </div>
             </div>
 
-            {/* Star Rating Widget (Finished books only) */}
+            {/* Star Rating Widget & Date Finished (Finished books only) */}
             {readingStatus === "Finished" && (
-              <div className="pt-2">
-                <label className="block text-xs font-semibold text-slate-350 mb-1.5 font-sans">Book Rating</label>
-                <div className="flex items-center space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="text-slate-600 hover:text-amber-400 active:scale-90 transition-all cursor-pointer"
-                    >
-                      <Star 
-                        className={`w-6 h-6 ${
-                          star <= rating 
-                            ? "fill-amber-400 text-amber-400" 
-                            : "text-slate-700 hover:text-slate-500"
-                        }`} 
-                      />
-                    </button>
-                  ))}
-                  {rating > 0 && (
-                    <span className="text-xs text-amber-400 font-bold ml-2">({rating} Stars)</span>
-                  )}
+              <div className="pt-2 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-350 mb-1.5 font-sans">Book Rating</label>
+                  <div className="flex items-center space-x-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setRating(star)}
+                        className="text-slate-600 hover:text-amber-400 active:scale-90 transition-all cursor-pointer"
+                      >
+                        <Star 
+                          className={`w-6 h-6 ${
+                            star <= rating 
+                              ? "fill-amber-400 text-amber-400" 
+                              : "text-slate-700 hover:text-slate-500"
+                          }`} 
+                        />
+                      </button>
+                    ))}
+                    {rating > 0 && (
+                      <span className="text-xs text-amber-400 font-bold ml-2">({rating} Stars)</span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-350 mb-1.5 font-sans">Date Finished</label>
+                  <div className="relative">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            "w-full text-left font-normal pl-9 pr-3 py-2.5 h-10 text-xs bg-slate-900 border border-slate-850 hover:border-slate-700/80 focus:border-blue-500/30 focus:ring-2 focus:ring-blue-500/10 outline-none text-slate-200 rounded-2xl transition-all flex items-center cursor-pointer select-none relative",
+                            !dateFinished && "text-slate-500"
+                          )}
+                        >
+                          <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                          {dateFinished ? (
+                            format(parseISO(dateFinished), "PPP")
+                          ) : (
+                            <span className="text-slate-500">Pick date finished</span>
+                          )}
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 border-slate-800" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={dateFinished ? parseISO(dateFinished) : undefined}
+                          onSelect={(date) => handleDateChange(date, setDateFinished)}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
               </div>
             )}

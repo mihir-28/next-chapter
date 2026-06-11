@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
@@ -8,6 +8,7 @@ import {
     BookOpen,
     Kanban,
     PlusCircle,
+    Plus,
     LogOut,
     ChevronRight,
 } from "lucide-react";
@@ -42,6 +43,11 @@ function GoogleMark({ className = "w-5 h-5" }: { className?: string }) {
 export default function AppShell({ children }: { children: React.ReactNode }) {
     const { user, loading, signInWithGoogle, logOut } = useAuth();
     const pathname = usePathname();
+
+    // Reset scroll to top on route change
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
 
     // Navigation config
     const navItems = [
@@ -247,42 +253,89 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
             {/* Floating Navigation Dock for Mobile Devices (visionOS style) */}
             <div className="md:hidden fixed bottom-6 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-                <div className="flex items-center gap-1.5 px-3 py-2 rounded-full! glass-panel backdrop-blur-sm shadow-2xl border border-white/10 max-w-sm w-full justify-between pointer-events-auto">
-                    {navItems.map((item) => {
-                        const Icon = item.icon;
-                        const isActive = pathname === item.href;
-                        return (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`relative flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all duration-300 cursor-pointer ${
-                                    isActive
-                                        ? "text-white font-bold"
-                                        : "text-slate-400 hover:text-slate-200"
-                                }`}
-                            >
-                                {/* Active background capsule with spring motion */}
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeMobileTab"
-                                        className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full backdrop-blur-sm"
-                                        style={{ zIndex: -1 }}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 350,
-                                            damping: 26,
-                                        }}
-                                    />
-                                )}
-                                <Icon className="w-5.5 h-5.5" />
-                                <span className="text-[8px] mt-0.5 font-bold uppercase tracking-wider scale-90">
-                                    {item.name
-                                        .replace("Dashboard", "Home")
-                                        .replace("Add ARC", "New")}
-                                </span>
-                            </Link>
-                        );
-                    })}
+                <div className="flex items-center gap-3.5 max-w-sm w-full pointer-events-auto">
+                    {/* Main Navigation Pill */}
+                    <div className="flex-1 flex items-center gap-1.5 px-3 py-2 rounded-full! glass-panel backdrop-blur-sm shadow-2xl border border-white/10 justify-between">
+                        {navItems
+                            .filter((item) => item.href !== "/add")
+                            .map((item) => {
+                                const Icon = item.icon;
+                                const isActive = pathname === item.href;
+
+                                 // Color mapping for icons (Dashboard: Rose/Pink, Library: Sky Blue, Kanban: Emerald)
+                                 let iconColor = "text-slate-400";
+                                 if (item.name === "Dashboard") {
+                                     iconColor = isActive ? "text-[#f472b6]" : "text-[#f472b6]/50";
+                                 } else if (item.name === "Library") {
+                                     iconColor = isActive ? "text-[#64d2ff]" : "text-[#64d2ff]/50";
+                                 } else if (item.name === "Kanban") {
+                                     iconColor = isActive ? "text-[#34d399]" : "text-[#34d399]/50";
+                                 }
+
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className={`relative flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-full transition-all duration-300 cursor-pointer ${
+                                            isActive
+                                                ? "text-[#fbdf93] font-bold"
+                                                : "text-[#fbdf93]/50 hover:text-[#fbdf93]/80"
+                                        }`}
+                                        style={isActive ? { textShadow: "0 0 8px rgba(251, 223, 147, 0.25)" } : undefined}
+                                    >
+                                        {/* Active background capsule with spring motion */}
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="activeMobileTab"
+                                                layout="x"
+                                                className="absolute inset-0 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full"
+                                                style={{ zIndex: -1 }}
+                                                transition={{
+                                                    type: "spring",
+                                                    stiffness: 350,
+                                                    damping: 26,
+                                                }}
+                                            />
+                                        )}
+                                        <Icon className={`w-5.5 h-5.5 transition-all duration-300 ${iconColor} ${isActive ? "scale-110 drop-shadow-[0_0_6px_rgba(251,223,147,0.15)]" : "scale-100"}`} />
+                                        <span className="text-[8px] mt-0.5 font-bold uppercase tracking-wider scale-90">
+                                            {item.name.replace("Dashboard", "Home")}
+                                        </span>
+                                    </Link>
+                                );
+                            })}
+                    </div>
+
+                    {/* Solo Add Button */}
+                    <div className="w-17 h-17 glass-panel backdrop-blur-sm shadow-2xl border border-white/10 rounded-full! flex items-center justify-center shrink-0">
+                        <Link
+                            href="/add"
+                            className="relative w-full h-full rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer"
+                            title="Add ARC"
+                        >
+                            {/* Active background capsule with spring motion */}
+                            {pathname === "/add" && (
+                                <motion.div
+                                    layoutId="activeMobileTab"
+                                    className="absolute inset-2.25 bg-white/15 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_1px_2px_rgba(0,0,0,0.15)] rounded-full"
+                                    style={{ zIndex: -1 }}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 350,
+                                        damping: 26,
+                                    }}
+                                />
+                            )}
+                            <Plus 
+                                className={`w-6 h-6 transition-all duration-300 text-[#b58dfa] ${
+                                    pathname === "/add" 
+                                        ? "scale-110 drop-shadow-[0_0_6px_rgba(181,141,250,0.2)]" 
+                                        : "opacity-55 hover:opacity-85"
+                                }`} 
+                                style={{ strokeWidth: 2.5 }}
+                            />
+                        </Link>
+                    </div>
                 </div>
             </div>
             <InstallToast />
