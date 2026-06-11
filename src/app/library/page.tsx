@@ -202,9 +202,10 @@ export default function LibraryPage() {
             className={`px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap border cursor-pointer transition-all duration-300 ${
               selectedReadingStatus === status
                 ? status === "All" ? "bg-white/10 text-white border-white/10 shadow" :
-                  status === "To Read" ? "bg-sky-500/10 text-sky-400 border-sky-500/30 shadow-sm" :
+                  status === "To Read" ? "bg-amber-500/10 text-amber-400 border-amber-500/30 shadow-sm" :
                   status === "Currently Reading" ? "bg-blue-500/10 text-blue-400 border-blue-500/30 shadow-sm" :
                   status === "Finished" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-sm" :
+                  status === "DNF" ? "bg-rose-500/10 text-rose-400 border-rose-500/30 shadow-sm" :
                   "bg-slate-700/20 text-slate-400 border-slate-700/30 shadow-sm"
                 : "bg-slate-950/20 text-slate-400 border-white/5 hover:border-slate-800 hover:text-slate-200"
             }`}
@@ -351,18 +352,26 @@ export default function LibraryPage() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredAndSortedARCs.map((arc) => (
-            <motion.div
-              key={arc.id}
-              layout
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ARCCard arc={arc} />
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 relative">
+          <AnimatePresence mode="popLayout">
+            {filteredAndSortedARCs.map((arc) => (
+              <motion.div
+                key={arc.id}
+                layout
+                initial={{ opacity: 0, y: 15, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 15, scale: 0.96 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 350,
+                  damping: 28,
+                  mass: 0.8
+                }}
+              >
+                <ARCCard arc={arc} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </div>

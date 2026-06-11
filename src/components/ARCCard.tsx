@@ -19,13 +19,13 @@ export default function ARCCard({ arc }: ARCCardProps) {
   const getReadingStatusMeta = (status: ReadingStatus) => {
     switch (status) {
       case "To Read":
-        return { dot: "bg-sky-400", text: "text-sky-300" };
+        return { dot: "bg-amber-400", text: "text-amber-300" };
       case "Currently Reading":
         return { dot: "bg-blue-500 animate-pulse", text: "text-blue-400" };
       case "Finished":
         return { dot: "bg-emerald-400", text: "text-emerald-300" };
       case "DNF":
-        return { dot: "bg-slate-500", text: "text-slate-400" };
+        return { dot: "bg-rose-500", text: "text-rose-400" };
       default:
         return { dot: "bg-slate-400", text: "text-slate-400" };
     }
