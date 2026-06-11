@@ -3,7 +3,7 @@
 # Next Chapter 📚✨
 
 <p align="center">
-  <img src="./public/logo.png" alt="Next Chapter Logo" width="180" />
+  <img src="./public/og-og.png" alt="Next Chapter Banner"/>
 </p>
 
 <p align="center">
@@ -20,10 +20,6 @@
 Next Chapter helps reviewers keep track of Advance Reader Copies (ARCs), reading progress, review deadlines, and upcoming releases without relying on spreadsheets or scattered notes.
 
 Built as a mobile-first Progressive Web App (PWA), it provides a focused workspace for managing your reading queue and ensuring no review deadline slips through the cracks.
-
-<p align="center">
-  <img src="./public/og-og.png" alt="Next Chapter Banner"/>
-</p>
 
 ---
 
