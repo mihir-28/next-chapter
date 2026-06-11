@@ -91,23 +91,35 @@ export default function DashboardPage() {
 
     const overdueCount = arcs.filter(
         (a) =>
-            getDaysRemaining(a.deadline) < 0 && a.reviewStatus !== "Published",
+            getDaysRemaining(a.deadline) < 0 &&
+            a.reviewStatus !== "Published" &&
+            a.readingStatus !== "DNF",
     ).length;
 
-    // Deadline summaries (excluding published)
+    // Deadline summaries (excluding published and DNF)
     const dueThisWeek = arcs.filter((a) => {
         const days = getDaysRemaining(a.deadline);
-        return days >= 0 && days <= 7 && a.reviewStatus !== "Published";
+        return (
+            days >= 0 &&
+            days <= 7 &&
+            a.reviewStatus !== "Published" &&
+            a.readingStatus !== "DNF"
+        );
     }).length;
 
     const dueThisMonth = arcs.filter((a) => {
         const days = getDaysRemaining(a.deadline);
-        return days >= 0 && days <= 30 && a.reviewStatus !== "Published";
+        return (
+            days >= 0 &&
+            days <= 30 &&
+            a.reviewStatus !== "Published" &&
+            a.readingStatus !== "DNF"
+        );
     }).length;
 
-    // Next 5 upcoming review deadlines (sorted by urgency, excluding published)
+    // Next 5 upcoming review deadlines (sorted by urgency, excluding published and DNF)
     const upcomingARCs = arcs
-        .filter((a) => a.reviewStatus !== "Published")
+        .filter((a) => a.reviewStatus !== "Published" && a.readingStatus !== "DNF")
         .map((a) => ({
             ...a,
             daysLeft: getDaysRemaining(a.deadline),
@@ -309,6 +321,7 @@ export default function DashboardPage() {
                                 const urgency = getUrgencyInfo(
                                     arc.deadline,
                                     isFinishedOrSubmitted,
+                                    arc.readingStatus === "DNF",
                                 );
 
                                 return (

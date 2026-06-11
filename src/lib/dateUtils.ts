@@ -35,7 +35,7 @@ export interface UrgencyInfo {
 /**
  * Returns color-coded tailwind classes and label based on deadline urgency
  */
-export const getUrgencyInfo = (deadlineStr: string, isFinishedOrSubmitted: boolean): UrgencyInfo => {
+export const getUrgencyInfo = (deadlineStr: string, isFinishedOrSubmitted: boolean, isDNF?: boolean): UrgencyInfo => {
   const days = getDaysRemaining(deadlineStr);
   
   if (isFinishedOrSubmitted) {
@@ -44,6 +44,16 @@ export const getUrgencyInfo = (deadlineStr: string, isFinishedOrSubmitted: boole
       borderClass: "border-slate-800",
       dotClass: "bg-slate-500",
       label: "Completed",
+      daysRemaining: days
+    };
+  }
+
+  if (isDNF) {
+    return {
+      colorClass: "text-slate-400 bg-slate-800/40",
+      borderClass: "border-slate-800",
+      dotClass: "bg-slate-500",
+      label: "DNF",
       daysRemaining: days
     };
   }

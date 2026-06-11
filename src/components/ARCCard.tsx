@@ -13,7 +13,7 @@ interface ARCCardProps {
 
 export default function ARCCard({ arc }: ARCCardProps) {
   const isFinishedOrSubmitted = arc.readingStatus === "Finished" || arc.reviewStatus === "Published";
-  const urgency = getUrgencyInfo(arc.deadline, isFinishedOrSubmitted);
+  const urgency = getUrgencyInfo(arc.deadline, isFinishedOrSubmitted, arc.readingStatus === "DNF");
 
   // Helper colors for Reading Status dot/text
   const getReadingStatusMeta = (status: ReadingStatus) => {
@@ -49,7 +49,7 @@ export default function ARCCard({ arc }: ARCCardProps) {
 
   // Dynamic border glow highlight class based on urgency
   const getGlowClass = () => {
-    if (isFinishedOrSubmitted) return "hover:border-slate-700/50";
+    if (isFinishedOrSubmitted || arc.readingStatus === "DNF") return "hover:border-slate-700/50";
     const days = urgency.daysRemaining;
     if (days < 0) return "hover:border-rose-500/30 hover:shadow-[0_0_20px_0_rgba(244,63,94,0.08)]";
     if (days <= 7) return "hover:border-amber-500/30 hover:shadow-[0_0_20px_0_rgba(245,158,11,0.08)]";

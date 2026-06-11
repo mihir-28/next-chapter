@@ -50,9 +50,12 @@ export default function LibraryPage() {
 
     // Helper to determine status category weight for ordering
     const getCategoryWeight = (arc: ARC) => {
+      if (arc.readingStatus === "DNF") {
+        return 5;
+      }
       const isFinished = arc.readingStatus === "Finished" || arc.reviewStatus === "Published";
       if (isFinished) {
-        return arc.readingStatus === "DNF" ? 5 : 4;
+        return 4;
       }
       
       const daysRemaining = getDaysRemaining(arc.deadline);
